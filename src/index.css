@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========== Impressão / Salvar em PDF ========== */
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  /* Esconde tudo que não for a página A4 (editor/topbar) */
+  body * {
+    visibility: hidden;
+  }
+  .engicore-print-page,
+  .engicore-print-page * {
+    visibility: visible;
+  }
+
+  /* Força o navegador a imprimir cores e fundos (evita elementos “sumindo”) */
+  html,
+  body,
+  body * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html,
+  body {
+    width: 100% !important;
+    min-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  /* Só a área da proposta na tela; na impressão ocupa a página inteira */
+  body {
+    padding: 0 !important;
+  }
+
+  /* Contêiner A4: largura total na impressão, fundo garantido */
+  .engicore-print-page {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    height: auto !important;
+    box-shadow: none !important;
+    padding: 15mm !important; /* mantém margem interna na impressão */
+    background: #fff !important;
+    overflow: visible !important;
+  }
+
+  /* Evita que blocos coloridos quebrem no meio */
+  .engicore-print-page .flex,
+  .engicore-print-page .grid,
+  .engicore-print-page section,
+  .engicore-print-page table,
+  .engicore-print-page thead,
+  .engicore-print-page tbody,
+  .engicore-print-page tr {
+    page-break-inside: avoid;
+  }
+
+  /* Tabela: evita corte e garante bordas/cores */
+  .engicore-print-page table {
+    overflow: visible !important;
+  }
+  .engicore-print-page th,
+  .engicore-print-page td {
+    page-break-inside: avoid;
+  }
+
+  /* Ícones SVG (lucide): garante que apareçam e não cortem */
+  .engicore-print-page svg {
+    overflow: visible !important;
+    flex-shrink: 0;
+  }
+
+  /* Wrapper externo: na impressão não centraliza, evita quebra */
+  .engicore-print-wrapper {
+    display: block !important;
+    background: #fff !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+  }
+}
