@@ -404,7 +404,7 @@ const App = () => {
                       }
                     />
                     <div className="flex min-w-0 items-center rounded border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-black leading-tight text-slate-700 sm:text-sm sm:whitespace-nowrap">
-                      dias após aprovação
+                      dias
                     </div>
                   </div>
                 </div>
