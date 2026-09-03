@@ -393,7 +393,7 @@ const App = () => {
                 </div>
                 <div>
                   <label className="text-xs font-black uppercase tracking-widest text-slate-500">Prazo de entrega</label>
-                  <div className="mt-1 grid grid-cols-[1fr,auto] gap-2">
+                  <div className="mt-1 grid grid-cols-[5.5rem,minmax(0,1fr)] gap-2">
                     <input
                       type="number"
                       min="0"
@@ -403,14 +403,14 @@ const App = () => {
                         setPath(['delivery', 'daysAfterApproval'], Math.max(0, Math.floor(toNumber(e.target.value))))
                       }
                     />
-                    <div className="flex items-center rounded border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-black text-slate-700">
+                    <div className="flex min-w-0 items-center rounded border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-black leading-tight text-slate-700 sm:text-sm sm:whitespace-nowrap">
                       dias após aprovação
                     </div>
                   </div>
                 </div>
                 <div>
                   <label className="text-xs font-black uppercase tracking-widest text-slate-500">Garantia</label>
-                  <div className="mt-1 grid grid-cols-[1fr,auto] gap-2">
+                  <div className="mt-1 grid grid-cols-[5.5rem,minmax(0,1fr)] gap-2">
                     <input
                       type="number"
                       min="0"
