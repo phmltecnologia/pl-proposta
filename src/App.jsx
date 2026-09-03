@@ -391,7 +391,7 @@ const App = () => {
                     onChange={(e) => setPath(['service', 'complaint'], e.target.value)}
                   />
                 </div>
-                <div>
+                <div className="col-span-2">
                   <label className="text-xs font-black uppercase tracking-widest text-slate-500">Prazo de entrega</label>
                   <div className="mt-1 grid grid-cols-[5.5rem,minmax(0,1fr)] gap-2">
                     <input
@@ -408,7 +408,7 @@ const App = () => {
                     </div>
                   </div>
                 </div>
-                <div>
+                <div className="col-span-2">
                   <label className="text-xs font-black uppercase tracking-widest text-slate-500">Garantia</label>
                   <div className="mt-1 grid grid-cols-[5.5rem,minmax(0,1fr)] gap-2">
                     <input
