@@ -380,16 +380,16 @@ export default function ConsultingQuote({ onBack }) {
         </div>
 
         <aside className="min-w-0 xl:sticky xl:top-24 xl:self-start">
-          <div className="mb-4 rounded-2xl bg-slate-950 p-5 text-white shadow-lg">
+          <div className="mb-4 rounded-2xl bg-white p-5 text-slate-950 shadow-sm ring-1 ring-slate-200">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Resumo</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Resumo</p>
                 <p className="mt-1 text-lg font-black">{investment.label}</p>
-                <p className="mt-1 text-2xl font-black text-amber-400">{investment.priced.length ? formatMoney(investment.total) : 'A definir'}</p>
+                <p className="mt-1 text-2xl font-black text-blue-700">{investment.priced.length ? formatMoney(investment.total) : 'A definir'}</p>
               </div>
-              <div className="rounded-xl bg-white/10 px-3 py-2 text-center"><p className="text-2xl font-black">{quote.selectedModules.length}</p><p className="text-[10px] uppercase text-slate-400">módulos</p></div>
+              <div className="rounded-xl bg-slate-100 px-3 py-2 text-center"><p className="text-2xl font-black">{quote.selectedModules.length}</p><p className="text-[10px] uppercase text-slate-500">módulos</p></div>
             </div>
-            {investment.priced.length > 0 && investment.unpriced.length > 0 ? <p className="mt-3 text-xs leading-relaxed text-amber-200">Total parcial: {investment.unpriced.length} módulo(s) ainda está(ão) “A definir”.</p> : null}
+            {investment.priced.length > 0 && investment.unpriced.length > 0 ? <p className="mt-3 text-xs leading-relaxed text-amber-800">Total parcial: {investment.unpriced.length} módulo(s) ainda está(ão) “A definir”.</p> : null}
           </div>
 
           {validation.length ? (
@@ -401,14 +401,14 @@ export default function ConsultingQuote({ onBack }) {
             <div className="mb-4 flex items-center gap-2 rounded-xl border border-emerald-300 bg-emerald-50 p-4 text-sm font-black text-emerald-800"><Check size={17} /> Proposta pronta para download</div>
           )}
 
-          <div className="overflow-hidden rounded-2xl bg-slate-700 shadow-xl ring-1 ring-slate-300">
-            <div className="flex items-center justify-between bg-slate-900 px-4 py-3 text-white"><span className="text-sm font-black">Pré-visualização do PDF</span><span className="text-xs text-slate-400">A4 multipágina</span></div>
+          <div className="overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-slate-300">
+            <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 text-slate-900"><span className="text-sm font-black">Pré-visualização do PDF</span><span className="text-xs text-slate-500">A4 multipágina · tema claro</span></div>
             <div className="hidden h-[800px] xl:block">
               <PDFViewer width="100%" height="100%" showToolbar={false}>
                 <ConsultingPdf quote={quote} logoUrl={logoUrl} />
               </PDFViewer>
             </div>
-            <div className="p-6 text-center text-sm text-slate-200 xl:hidden">A pré-visualização completa aparece em telas maiores. O download do PDF funciona normalmente neste dispositivo.</div>
+            <div className="p-6 text-center text-sm text-slate-600 xl:hidden">A pré-visualização completa aparece em telas maiores. O download do PDF funciona normalmente neste dispositivo.</div>
           </div>
           <p className="mt-3 text-center text-xs leading-relaxed text-slate-500">Os dados ficam somente neste navegador. Para trabalhar em outro computador, leve o PDF final ou abra uma nova proposta.</p>
         </aside>

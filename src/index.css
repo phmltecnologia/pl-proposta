@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+:root,
+html,
+body,
+#root {
+  color-scheme: only light;
+  background-color: #f1f5f9;
+}
+
+input,
+textarea,
+select,
+button,
+iframe {
+  color-scheme: only light;
+}
+
 /* ========== Impressão / Salvar em PDF ========== */
 @page {
   size: A4;

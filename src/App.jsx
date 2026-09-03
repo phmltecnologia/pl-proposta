@@ -23,24 +23,24 @@ const DOCUMENTS = [
 
 function HomeScreen({ onSelect }) {
   return (
-    <main className="min-h-screen bg-slate-950 px-4 py-10 text-white sm:px-6 lg:py-16">
+    <main className="min-h-screen bg-slate-100 px-4 py-10 text-slate-950 sm:px-6 lg:py-16">
       <div className="mx-auto max-w-6xl">
         <header className="mb-12 flex items-center gap-4">
-          <div className="flex h-16 w-24 items-center justify-center rounded-xl bg-white p-2 shadow-2xl shadow-blue-950/40">
+          <div className="flex h-16 w-24 items-center justify-center rounded-xl bg-white p-2 shadow-lg ring-1 ring-slate-200">
             <img src="/materials/logo.jpg" alt="PL Tecnologia" className="max-h-full max-w-full object-contain" />
           </div>
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.28em] text-blue-300">PL Tecnologia</p>
+            <p className="text-xs font-black uppercase tracking-[0.28em] text-blue-700">PL Tecnologia</p>
             <h1 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">Central de propostas</h1>
           </div>
         </header>
 
         <section className="mb-8 max-w-3xl">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-slate-200 ring-1 ring-white/10">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700 ring-1 ring-blue-200">
             <Home size={14} /> Escolha o documento
           </div>
           <h2 className="text-3xl font-black leading-tight sm:text-5xl">Qual proposta você quer preparar hoje?</h2>
-          <p className="mt-4 text-base leading-relaxed text-slate-300 sm:text-lg">
+          <p className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">
             Cada modelo mantém seu próprio rascunho neste navegador. Você pode alternar entre eles sem misturar os dados.
           </p>
         </section>
@@ -65,7 +65,7 @@ function HomeScreen({ onSelect }) {
           ))}
         </div>
 
-        <p className="mt-8 text-xs leading-relaxed text-slate-400">
+        <p className="mt-8 text-xs leading-relaxed text-slate-500">
           Os rascunhos ficam salvos somente neste computador e neste navegador. PDFs baixados continuam sendo os documentos permanentes.
         </p>
       </div>
@@ -82,5 +82,5 @@ export default function App() {
 }
 
 function LoadingScreen() {
-  return <div className="flex min-h-screen items-center justify-center bg-slate-950 text-sm font-black text-white">Carregando editor…</div>;
+  return <div className="flex min-h-screen items-center justify-center bg-slate-100 text-sm font-black text-slate-900">Carregando editor…</div>;
 }
