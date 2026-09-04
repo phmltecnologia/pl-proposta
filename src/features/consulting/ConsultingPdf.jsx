@@ -101,16 +101,13 @@ const styles = StyleSheet.create({
   moduleTitle: { flex: 1, color: COLORS.navy, fontFamily: 'Helvetica-Bold', fontSize: 11 },
   moduleBody: { padding: 11 },
   subTitle: { marginTop: 7, marginBottom: 4, fontFamily: 'Helvetica-Bold', color: COLORS.navy, fontSize: 9 },
-  bulletRow: { flexDirection: 'row', paddingLeft: 2, marginBottom: 3 },
-  bullet: { width: 12, color: COLORS.amber, fontFamily: 'Helvetica-Bold' },
-  bulletText: { flex: 1, color: COLORS.slate },
   moduleMeta: { marginTop: 9, paddingTop: 8, borderTopWidth: 1, borderTopColor: COLORS.border, flexDirection: 'row' },
   moduleMetaCell: { flex: 1 },
-  warning: { marginTop: 8, padding: 8, backgroundColor: '#fff7ed', color: '#9a3412', borderRadius: 3 },
   table: { borderWidth: 1, borderColor: COLORS.border, borderRadius: 4, marginBottom: 8 },
   tableHeader: { flexDirection: 'row', backgroundColor: '#eaf2ff', paddingVertical: 7, paddingHorizontal: 8 },
   tableRow: { flexDirection: 'row', paddingVertical: 7, paddingHorizontal: 8, borderTopWidth: 1, borderTopColor: COLORS.border },
   tableMain: { flex: 1 },
+  tableWorkload: { width: 78, textAlign: 'right' },
   tableDuration: { width: 92, textAlign: 'right' },
   tableMoney: { width: 108, textAlign: 'right' },
   tableHeaderText: { color: COLORS.navy, fontFamily: 'Helvetica-Bold', fontSize: 8 },
@@ -152,15 +149,6 @@ function Footer({ fixed = false }) {
       <Text render={({ pageNumber, totalPages }) => `Página ${pageNumber} de ${totalPages}`} />
     </View>
   );
-}
-
-function BulletList({ items = [] }) {
-  return items.filter(Boolean).map((item, index) => (
-    <View key={`${item}-${index}`} style={styles.bulletRow}>
-      <Text style={styles.bullet}>•</Text>
-      <Text style={styles.bulletText}>{item}</Text>
-    </View>
-  ));
 }
 
 export default function ConsultingPdf({ quote, logoUrl }) {
@@ -214,12 +202,9 @@ export default function ConsultingPdf({ quote, logoUrl }) {
           </View>
         ) : null}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Entregas transversais</Text>
+          <Text style={styles.sectionTitle}>Como será o trabalho</Text>
           <Text style={styles.paragraph}>
-            Todos os módulos incluem documentação específica. Ao final dos trabalhos será realizada uma visita presencial para validação das entregas, apresentação da documentação e treinamento da equipe da contratante.
-          </Text>
-          <Text style={styles.paragraph}>
-            Deslocamento, alimentação e eventual hospedagem necessários para essa visita estão contemplados nos valores informados nos módulos, sem cobrança separada nesta proposta.
+            A assessoria será organizada em módulos. Cada módulo apresenta uma descrição, uma estimativa de horas, prazo e investimento. Ao final, faremos uma visita para validar o trabalho, entregar a documentação e orientar a equipe. Deslocamento, alimentação e eventual hospedagem dessa visita estão incluídos nos valores dos módulos.
           </Text>
         </View>
       </Page>
@@ -228,22 +213,18 @@ export default function ConsultingPdf({ quote, logoUrl }) {
         <Page key={module.id} size="A4" style={styles.page} wrap>
           <Header quote={quote} logoUrl={logoUrl} fixed />
           <Footer fixed />
-          <Text style={styles.title}>Escopo · módulo {String(index + 1).padStart(2, '0')}</Text>
+          <Text style={styles.title}>Módulo {String(index + 1).padStart(2, '0')}</Text>
           <View style={styles.moduleCard}>
             <View style={styles.moduleHeader}>
               <Text style={styles.moduleNumber}>{String(index + 1).padStart(2, '0')}</Text>
               <Text style={styles.moduleTitle}>{module.title}</Text>
             </View>
             <View style={styles.moduleBody}>
-              <Text style={styles.subTitle}>Objetivo</Text>
-              <Text style={styles.paragraph}>{module.objective || 'A definir.'}</Text>
-              <Text style={styles.subTitle}>Atividades</Text>
-              <BulletList items={module.activities} />
-              <Text style={styles.subTitle}>Entregáveis</Text>
-              <BulletList items={module.deliverables} />
-              {module.exclusions ? <Text style={styles.warning}><Text style={{ fontFamily: 'Helvetica-Bold' }}>Limites do escopo: </Text>{module.exclusions}</Text> : null}
+              <Text style={styles.subTitle}>Descrição</Text>
+              <Text style={styles.paragraph}>{module.description || 'A definir.'}</Text>
               <View style={styles.moduleMeta} wrap={false}>
-                <View style={styles.moduleMetaCell}><Text style={styles.label}>Duração estimada</Text><Text style={styles.value}>{Number(module.duration) > 0 ? `${module.duration} ${module.durationUnit}` : 'A definir'}</Text></View>
+                <View style={styles.moduleMetaCell}><Text style={styles.label}>Carga horária</Text><Text style={styles.value}>{Number(module.workload) > 0 ? `${module.workload} horas` : 'A definir'}</Text></View>
+                <View style={styles.moduleMetaCell}><Text style={styles.label}>Prazo</Text><Text style={styles.value}>{Number(module.duration) > 0 ? `${module.duration} ${module.durationUnit}` : 'A definir'}</Text></View>
                 <View style={styles.moduleMetaCell}><Text style={styles.label}>Investimento</Text><Text style={styles.value}>{formatMoney(module.investment)}</Text></View>
               </View>
             </View>
@@ -260,12 +241,14 @@ export default function ConsultingPdf({ quote, logoUrl }) {
           <View style={styles.table}>
             <View style={styles.tableHeader}>
               <Text style={[styles.tableMain, styles.tableHeaderText]}>Módulo</Text>
+              <Text style={[styles.tableWorkload, styles.tableHeaderText]}>Carga horária</Text>
               <Text style={[styles.tableDuration, styles.tableHeaderText]}>Prazo</Text>
               <Text style={[styles.tableMoney, styles.tableHeaderText]}>Investimento</Text>
             </View>
             {modules.map((module) => (
               <View key={module.id} style={styles.tableRow} wrap={false}>
                 <Text style={styles.tableMain}>{module.title}</Text>
+                <Text style={styles.tableWorkload}>{Number(module.workload) > 0 ? `${module.workload} h` : 'A definir'}</Text>
                 <Text style={styles.tableDuration}>{Number(module.duration) > 0 ? `${module.duration} ${module.durationUnit}` : 'A definir'}</Text>
                 <Text style={styles.tableMoney}>{formatMoney(module.investment)}</Text>
               </View>

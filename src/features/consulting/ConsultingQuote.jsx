@@ -60,23 +60,11 @@ function TextAreaField({ label, value, onChange, placeholder = '', rows = 4, cla
 function ModuleFields({ module, onChange }) {
   return (
     <div className="grid gap-4 pt-4">
-      <TextField label="Título" value={module.title} onChange={(value) => onChange({ title: value })} />
-      <TextAreaField label="Objetivo" value={module.objective} onChange={(value) => onChange({ objective: value })} rows={3} />
-      <TextAreaField
-        label="Atividades (uma por linha)"
-        value={(module.activities || []).join('\n')}
-        onChange={(value) => onChange({ activities: value.split('\n') })}
-        rows={5}
-      />
-      <TextAreaField
-        label="Entregáveis (um por linha)"
-        value={(module.deliverables || []).join('\n')}
-        onChange={(value) => onChange({ deliverables: value.split('\n') })}
-        rows={5}
-      />
-      <TextAreaField label="Limites ou exclusões do escopo" value={module.exclusions || ''} onChange={(value) => onChange({ exclusions: value })} rows={3} placeholder="Opcional" />
+      <TextField label="Nome principal" value={module.title} onChange={(value) => onChange({ title: value })} />
+      <TextAreaField label="Descrição" value={module.description} onChange={(value) => onChange({ description: value })} rows={3} placeholder="Explique o módulo em poucas palavras, de forma simples." />
       <div className="grid gap-3 sm:grid-cols-3">
-        <TextField label="Duração" type="number" value={module.duration} onChange={(value) => onChange({ duration: Math.max(0, Number(value) || 0) })} />
+        <TextField label="Carga horária (h)" type="number" value={module.workload} onChange={(value) => onChange({ workload: Math.max(0, Number(value) || 0) })} />
+        <TextField label="Prazo" type="number" value={module.duration} onChange={(value) => onChange({ duration: Math.max(0, Number(value) || 0) })} />
         <Field label="Unidade do prazo">
           <select value={module.durationUnit || 'dias úteis'} onChange={(event) => onChange({ durationUnit: event.target.value })} className={inputClass}>
             <option>dias úteis</option>
@@ -108,14 +96,15 @@ function Section({ title, subtitle, children, action, className = '' }) {
 
 function cleanModule(module) {
   return {
-    ...module,
+    id: module.id || makeId('module'),
+    sourceModuleId: module.sourceModuleId,
     title: module.title || 'Módulo sem título',
-    objective: module.objective || '',
-    activities: Array.isArray(module.activities) ? module.activities : [],
-    deliverables: Array.isArray(module.deliverables) ? module.deliverables : [],
+    description: module.description ?? module.objective ?? '',
+    workload: Math.max(0, Number(module.workload) || 0),
     duration: Math.max(0, Number(module.duration) || 0),
     durationUnit: module.durationUnit || 'dias úteis',
     investment: Math.max(0, Number(module.investment) || 0),
+    position: module.position,
   };
 }
 
@@ -141,7 +130,9 @@ export default function ConsultingQuote({ onBack }) {
   });
   const [library, setLibrary] = useState(() => {
     const stored = readStorage(CONSULTING_MODULES_KEY, null);
-    return Array.isArray(stored) ? reindex(stored.map(cleanModule)) : cloneDefaultModules();
+    if (!Array.isArray(stored)) return cloneDefaultModules();
+    const standardModules = new Map(cloneDefaultModules().map((module) => [module.id, module]));
+    return reindex(stored.map((module) => standardModules.get(module.id) || cleanModule(module)));
   });
   const [expandedLibrary, setExpandedLibrary] = useState(null);
   const [expandedSelected, setExpandedSelected] = useState(null);
@@ -212,10 +203,8 @@ export default function ConsultingQuote({ onBack }) {
     const module = {
       id: makeId('library-module'),
       title: 'Novo módulo personalizado',
-      objective: '',
-      activities: [''],
-      deliverables: ['Documentação específica do módulo.'],
-      exclusions: '',
+      description: '',
+      workload: 0,
       duration: 0,
       durationUnit: 'dias úteis',
       investment: 0,
@@ -305,7 +294,7 @@ export default function ConsultingQuote({ onBack }) {
 
           <Section
             title="Biblioteca de módulos"
-            subtitle="Edite os modelos ou crie novos. Ao adicionar, o sistema copia o módulo para esta proposta."
+            subtitle="Escolha os módulos da proposta ou crie um novo. Ao adicionar, o sistema copia o módulo para esta proposta."
             action={<div className="flex gap-2"><button type="button" onClick={resetLibrary} title="Restaurar padrões" className="rounded-lg p-2 text-slate-500 hover:bg-slate-100"><RefreshCw size={17} /></button><button type="button" onClick={createCustomModule} className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-3 py-2 text-sm font-black text-slate-950 hover:bg-amber-400"><Plus size={16} /> Novo módulo</button></div>}
           >
             <div className="grid gap-3">
@@ -317,12 +306,12 @@ export default function ConsultingQuote({ onBack }) {
                       <div className="mt-0.5 rounded-lg bg-white p-2 text-blue-700 ring-1 ring-slate-200"><Library size={17} /></div>
                       <div className="min-w-0 flex-1">
                         <h3 className="font-black leading-snug">{module.title}</h3>
-                        <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-500">{module.objective || 'Objetivo ainda não informado.'}</p>
+                        <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-500">{module.description || 'Descrição ainda não informada.'}</p>
                       </div>
                       <button type="button" onClick={() => addFromLibrary(module)} className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-blue-700 px-3 py-2 text-xs font-black text-white hover:bg-blue-800"><Plus size={14} /> Inserir</button>
                     </div>
                     <div className="mt-3 flex items-center justify-between border-t border-slate-200 pt-3">
-                      <span className="text-xs font-bold text-slate-500">{Number(module.duration) > 0 ? `${module.duration} ${module.durationUnit}` : 'Prazo a definir'} · {formatMoney(module.investment)}</span>
+                      <span className="text-xs font-bold text-slate-500">{Number(module.workload) > 0 ? `${module.workload} h` : 'Carga a definir'} · {Number(module.duration) > 0 ? `${module.duration} ${module.durationUnit}` : 'Prazo a definir'} · {formatMoney(module.investment)}</span>
                       <div className="flex gap-1">
                         <button type="button" onClick={() => deleteLibraryModule(module.id)} className="rounded p-2 text-red-600 hover:bg-red-50" title="Excluir da biblioteca"><Trash2 size={15} /></button>
                         <button type="button" onClick={() => setExpandedLibrary(expanded ? null : module.id)} className="inline-flex items-center gap-1 rounded px-2 py-2 text-xs font-black text-slate-700 hover:bg-white"><Pencil size={14} /> Editar {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</button>
@@ -350,7 +339,7 @@ export default function ConsultingQuote({ onBack }) {
                     <article key={module.id} className="rounded-xl border border-blue-200 bg-blue-50/40 p-4">
                       <div className="flex items-start gap-3">
                         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-950 text-xs font-black text-white">{index + 1}</span>
-                        <div className="min-w-0 flex-1"><h3 className="font-black leading-snug">{module.title}</h3><p className="mt-1 text-xs font-bold text-slate-500">{Number(module.duration) > 0 ? `${module.duration} ${module.durationUnit}` : 'Prazo a definir'} · {formatMoney(module.investment)}</p></div>
+                        <div className="min-w-0 flex-1"><h3 className="font-black leading-snug">{module.title}</h3><p className="mt-1 text-xs font-bold text-slate-500">{Number(module.workload) > 0 ? `${module.workload} h` : 'Carga a definir'} · {Number(module.duration) > 0 ? `${module.duration} ${module.durationUnit}` : 'Prazo a definir'} · {formatMoney(module.investment)}</p></div>
                         <div className="flex shrink-0 items-center gap-1">
                           <button type="button" disabled={index === 0} onClick={() => moveSelected(module.id, -1)} title="Mover para cima" className="rounded p-2 text-slate-600 hover:bg-white disabled:opacity-25"><ArrowUp size={16} /></button>
                           <button type="button" disabled={index === quote.selectedModules.length - 1} onClick={() => moveSelected(module.id, 1)} title="Mover para baixo" className="rounded p-2 text-slate-600 hover:bg-white disabled:opacity-25"><ArrowDown size={16} /></button>
