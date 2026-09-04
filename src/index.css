@@ -18,6 +18,12 @@ iframe {
   color-scheme: only light;
 }
 
+input[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  background-color: #fffbeb !important;
+  border-color: #fcd34d !important;
+}
+
 /* ========== Impressão / Salvar em PDF ========== */
 @page {
   size: A4;

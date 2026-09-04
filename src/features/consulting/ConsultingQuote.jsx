@@ -4,7 +4,6 @@ import {
   ArrowDown,
   ArrowLeft,
   ArrowUp,
-  Check,
   ChevronDown,
   ChevronUp,
   Download,
@@ -13,7 +12,6 @@ import {
   Pencil,
   Plus,
   RefreshCw,
-  Save,
   Trash2,
 } from 'lucide-react';
 import ConsultingPdf from './ConsultingPdf';
@@ -22,7 +20,6 @@ import {
   CONSULTING_QUOTE_KEY,
   cloneDefaultModules,
   createDefaultQuote,
-  getInvestmentSummary,
   makeId,
 } from './defaults';
 
@@ -42,18 +39,20 @@ function Field({ label, children, className = '' }) {
   return <label className={`block ${className}`}><span className={labelClass}>{label}</span>{children}</label>;
 }
 
-function TextField({ label, value, onChange, placeholder = '', type = 'text', className = '' }) {
+function TextField({ label, value, onChange, placeholder = '', type = 'text', className = '', required = false }) {
+  const missing = required && !String(value ?? '').trim();
   return (
     <Field label={label} className={className}>
-      <input type={type} value={value ?? ''} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} className={inputClass} />
+      <input type={type} value={value ?? ''} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} required={required} aria-required={required} aria-invalid={missing} className={`${inputClass} ${missing ? 'border-amber-300 bg-amber-50 focus:border-amber-500 focus:ring-amber-100' : ''}`} />
     </Field>
   );
 }
 
-function TextAreaField({ label, value, onChange, placeholder = '', rows = 4, className = '' }) {
+function TextAreaField({ label, value, onChange, placeholder = '', rows = 4, className = '', required = false }) {
+  const missing = required && !String(value ?? '').trim();
   return (
     <Field label={label} className={className}>
-      <textarea value={value ?? ''} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} rows={rows} className={`${inputClass} resize-y leading-relaxed`} />
+      <textarea value={value ?? ''} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} rows={rows} required={required} aria-required={required} aria-invalid={missing} className={`${inputClass} resize-y leading-relaxed ${missing ? 'border-amber-300 bg-amber-50 focus:border-amber-500 focus:ring-amber-100' : ''}`} />
     </Field>
   );
 }
@@ -92,9 +91,9 @@ function ModuleFields({ module, onChange }) {
   );
 }
 
-function Section({ title, subtitle, children, action }) {
+function Section({ title, subtitle, children, action, className = '' }) {
   return (
-    <section className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6">
+    <section className={`rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6 ${className}`}>
       <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-lg font-black tracking-tight text-slate-950">{title}</h2>
@@ -166,7 +165,6 @@ export default function ConsultingQuote({ onBack }) {
     return errors;
   }, [quote]);
 
-  const investment = useMemo(() => getInvestmentSummary(quote.selectedModules), [quote.selectedModules]);
   const logoUrl = typeof window === 'undefined' ? '/materials/logo.jpg' : new URL('/materials/logo.jpg', window.location.origin).href;
   const safeClient = (quote.client.name || 'CLIENTE').replace(/[\\/:*?"<>|]/g, '').trim();
   const safeNumber = (quote.number || 'SEM NUMERO').replace(/[\\/:*?"<>|]/g, '').trim();
@@ -280,7 +278,7 @@ export default function ConsultingQuote({ onBack }) {
         <div className="grid min-w-0 gap-6">
           <Section title="Identificação" subtitle="Dados que aparecem na capa e no cabeçalho da proposta.">
             <div className="grid gap-4 sm:grid-cols-2">
-              <TextField label="Número da proposta *" value={quote.number} onChange={(number) => patchQuote({ number })} />
+              <TextField label="Número da proposta *" value={quote.number} onChange={(number) => patchQuote({ number })} required />
               <TextField label="Data de emissão" type="date" value={quote.issueDate} onChange={(issueDate) => patchQuote({ issueDate })} />
               <TextField label="Título do documento" value={quote.title} onChange={(title) => patchQuote({ title })} className="sm:col-span-2" />
             </div>
@@ -288,7 +286,7 @@ export default function ConsultingQuote({ onBack }) {
 
           <Section title="Cliente" subtitle="Apenas o nome é obrigatório para liberar o PDF.">
             <div className="grid gap-4 sm:grid-cols-2">
-              <TextField label="Razão social / nome *" value={quote.client.name} onChange={(name) => patchClient({ name })} />
+              <TextField label="Razão social / nome *" value={quote.client.name} onChange={(name) => patchClient({ name })} required />
               <TextField label="CNPJ / CPF" value={quote.client.document} onChange={(document) => patchClient({ document })} />
               <TextField label="Contato" value={quote.client.contact} onChange={(contact) => patchClient({ contact })} />
               <TextField label="E-mail" type="email" value={quote.client.email} onChange={(email) => patchClient({ email })} />
@@ -300,7 +298,7 @@ export default function ConsultingQuote({ onBack }) {
           <Section title="Apresentação" subtitle="Explique o cenário, o resultado esperado e a proposta de valor.">
             <div className="grid gap-4">
               <TextAreaField label="Contexto" value={quote.context} onChange={(context) => patchQuote({ context })} rows={5} placeholder="Situação atual da empresa e necessidade identificada…" />
-              <TextAreaField label="Objetivo *" value={quote.objective} onChange={(objective) => patchQuote({ objective })} rows={4} placeholder="Resultado principal que esta assessoria deverá alcançar…" />
+              <TextAreaField label="Objetivo *" value={quote.objective} onChange={(objective) => patchQuote({ objective })} rows={4} placeholder="Resultado principal que esta assessoria deverá alcançar…" required />
               <TextAreaField label="Resumo executivo" value={quote.executiveSummary} onChange={(executiveSummary) => patchQuote({ executiveSummary })} rows={4} placeholder="Opcional: síntese da abordagem proposta…" />
             </div>
           </Section>
@@ -337,12 +335,12 @@ export default function ConsultingQuote({ onBack }) {
             </div>
           </Section>
 
-          <Section title="Módulos selecionados" subtitle="A ordem abaixo será usada no PDF. Edite livremente sem alterar a biblioteca.">
+          <Section title="Módulos selecionados" subtitle="A ordem abaixo será usada no PDF. Edite livremente sem alterar a biblioteca." className={!quote.selectedModules.length ? 'ring-amber-300' : ''}>
             {!quote.selectedModules.length ? (
-              <div className="rounded-xl border-2 border-dashed border-slate-300 px-6 py-10 text-center">
+              <div className="rounded-xl border-2 border-dashed border-amber-300 bg-amber-50 px-6 py-10 text-center">
                 <Library className="mx-auto text-slate-400" size={30} />
-                <p className="mt-3 font-black text-slate-700">Nenhum módulo selecionado</p>
-                <p className="mt-1 text-sm text-slate-500">Use o botão “Inserir” na biblioteca acima.</p>
+                <p className="mt-3 font-black text-amber-900">Selecione ao menos um módulo *</p>
+                <p className="mt-1 text-sm text-amber-800">Use o botão “Inserir” na biblioteca acima.</p>
               </div>
             ) : (
               <div className="grid gap-3">
@@ -370,8 +368,8 @@ export default function ConsultingQuote({ onBack }) {
 
           <Section title="Condições comerciais" subtitle="Prazo global e pagamento são obrigatórios para liberar o download.">
             <div className="grid gap-4 sm:grid-cols-2">
-              <TextField label="Prazo global *" value={quote.overallTimeline} onChange={(overallTimeline) => patchQuote({ overallTimeline })} placeholder="Ex.: 60 dias úteis após aprovação" />
-              <TextField label="Condição de pagamento *" value={quote.paymentTerms} onChange={(paymentTerms) => patchQuote({ paymentTerms })} placeholder="Ex.: 40% no aceite e 60% na entrega" />
+              <TextField label="Prazo global *" value={quote.overallTimeline} onChange={(overallTimeline) => patchQuote({ overallTimeline })} placeholder="Ex.: 60 dias úteis após aprovação" required />
+              <TextField label="Condição de pagamento *" value={quote.paymentTerms} onChange={(paymentTerms) => patchQuote({ paymentTerms })} placeholder="Ex.: 40% no aceite e 60% na entrega" required />
               <TextAreaField label="Premissas" value={quote.assumptions} onChange={(assumptions) => patchQuote({ assumptions })} rows={4} className="sm:col-span-2" />
               <TextAreaField label="Observações" value={quote.notes} onChange={(notes) => patchQuote({ notes })} rows={4} className="sm:col-span-2" placeholder="Opcional" />
               <TextField label="Local do aceite" value={quote.acceptanceLocation} onChange={(acceptanceLocation) => patchQuote({ acceptanceLocation })} className="sm:col-span-2" placeholder="Cidade/UF" />
@@ -380,27 +378,6 @@ export default function ConsultingQuote({ onBack }) {
         </div>
 
         <aside className="min-w-0 xl:sticky xl:top-24 xl:self-start">
-          <div className="mb-4 rounded-2xl bg-white p-5 text-slate-950 shadow-sm ring-1 ring-slate-200">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Resumo</p>
-                <p className="mt-1 text-lg font-black">{investment.label}</p>
-                <p className="mt-1 text-2xl font-black text-blue-700">{investment.priced.length ? formatMoney(investment.total) : 'A definir'}</p>
-              </div>
-              <div className="rounded-xl bg-slate-100 px-3 py-2 text-center"><p className="text-2xl font-black">{quote.selectedModules.length}</p><p className="text-[10px] uppercase text-slate-500">módulos</p></div>
-            </div>
-            {investment.priced.length > 0 && investment.unpriced.length > 0 ? <p className="mt-3 text-xs leading-relaxed text-amber-800">Total parcial: {investment.unpriced.length} módulo(s) ainda está(ão) “A definir”.</p> : null}
-          </div>
-
-          {validation.length ? (
-            <div className="mb-4 rounded-xl border border-amber-300 bg-amber-50 p-4">
-              <p className="flex items-center gap-2 text-sm font-black text-amber-900"><Save size={16} /> Complete para baixar o PDF</p>
-              <ul className="mt-2 grid gap-1 text-xs text-amber-800">{validation.map((error) => <li key={error}>• {error}</li>)}</ul>
-            </div>
-          ) : (
-            <div className="mb-4 flex items-center gap-2 rounded-xl border border-emerald-300 bg-emerald-50 p-4 text-sm font-black text-emerald-800"><Check size={17} /> Proposta pronta para download</div>
-          )}
-
           <div className="overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-slate-300">
             <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 text-slate-900"><span className="text-sm font-black">Pré-visualização do PDF</span><span className="text-xs text-slate-500">A4 multipágina · tema claro</span></div>
             <div className="hidden h-[800px] xl:block">
