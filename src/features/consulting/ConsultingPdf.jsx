@@ -13,6 +13,9 @@ const COLORS = {
   white: '#ffffff',
 };
 
+const FONT_SCALE = 2;
+const fontSize = (value) => value * FONT_SCALE;
+
 const styles = StyleSheet.create({
   page: {
     paddingTop: 76,
@@ -20,7 +23,7 @@ const styles = StyleSheet.create({
     paddingBottom: 58,
     paddingLeft: 46,
     fontFamily: 'Helvetica',
-    fontSize: 9.5,
+    fontSize: fontSize(9.5),
     lineHeight: 1.45,
     color: COLORS.navy,
     backgroundColor: COLORS.white,
@@ -28,6 +31,7 @@ const styles = StyleSheet.create({
   cover: {
     padding: 54,
     fontFamily: 'Helvetica',
+    fontSize: fontSize(9.5),
     color: COLORS.navy,
     backgroundColor: COLORS.white,
   },
@@ -42,16 +46,16 @@ const styles = StyleSheet.create({
   coverTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   coverLogoBox: { width: 132, height: 72, padding: 8, borderRadius: 6, backgroundColor: COLORS.white, borderWidth: 1, borderColor: COLORS.border },
   coverLogo: { width: '100%', height: '100%', objectFit: 'contain' },
-  coverNumber: { fontSize: 10, color: COLORS.slate, textAlign: 'right' },
+  coverNumber: { fontSize: fontSize(10), color: COLORS.slate, textAlign: 'right' },
   coverBody: { marginTop: 105 },
-  eyebrow: { fontSize: 10, letterSpacing: 2.2, color: COLORS.blue, textTransform: 'uppercase' },
-  coverTitle: { marginTop: 14, fontSize: 29, lineHeight: 1.15, fontFamily: 'Helvetica-Bold' },
+  eyebrow: { fontSize: fontSize(10), letterSpacing: 2.2, color: COLORS.blue, textTransform: 'uppercase' },
+  coverTitle: { marginTop: 14, fontSize: fontSize(29), lineHeight: 1.15, fontFamily: 'Helvetica-Bold' },
   coverRule: { marginTop: 28, width: 78, height: 5, backgroundColor: COLORS.amber },
-  coverClientLabel: { marginTop: 64, fontSize: 9, color: COLORS.slate, textTransform: 'uppercase', letterSpacing: 1.5 },
-  coverClient: { marginTop: 8, fontSize: 19, fontFamily: 'Helvetica-Bold' },
-  coverDate: { marginTop: 8, fontSize: 10, color: COLORS.slate },
-  coverBottom: { position: 'absolute', left: 54, right: 54, bottom: 54, flexDirection: 'row', justifyContent: 'space-between' },
-  coverContact: { fontSize: 8.5, color: COLORS.slate },
+  coverClientLabel: { marginTop: 64, fontSize: fontSize(9), color: COLORS.slate, textTransform: 'uppercase', letterSpacing: 1.5 },
+  coverClient: { marginTop: 8, fontSize: fontSize(19), fontFamily: 'Helvetica-Bold' },
+  coverDate: { marginTop: 8, fontSize: fontSize(10), color: COLORS.slate },
+  coverBottom: { position: 'absolute', left: 54, right: 54, bottom: 24, flexDirection: 'row', justifyContent: 'space-between' },
+  coverContact: { fontSize: fontSize(8.5), color: COLORS.slate },
   header: {
     position: 'absolute',
     top: 24,
@@ -66,7 +70,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   headerLogo: { width: 78, height: 26, objectFit: 'contain' },
-  headerMeta: { fontSize: 7.5, color: COLORS.slate, textAlign: 'right' },
+  headerMeta: { fontSize: fontSize(7.5), color: COLORS.slate, textAlign: 'right' },
   footer: {
     position: 'absolute',
     left: 46,
@@ -78,12 +82,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     color: COLORS.slate,
-    fontSize: 7.5,
+    fontSize: fontSize(7.5),
   },
-  title: { fontSize: 20, fontFamily: 'Helvetica-Bold', color: COLORS.navy, marginBottom: 16 },
+  title: { fontSize: fontSize(20), fontFamily: 'Helvetica-Bold', color: COLORS.navy, marginBottom: 16 },
   section: { marginBottom: 18 },
   sectionTitle: {
-    fontSize: 11,
+    fontSize: fontSize(11),
     fontFamily: 'Helvetica-Bold',
     color: COLORS.blue,
     textTransform: 'uppercase',
@@ -93,29 +97,29 @@ const styles = StyleSheet.create({
   paragraph: { color: COLORS.slate, marginBottom: 6, textAlign: 'justify' },
   infoGrid: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: 18 },
   infoCell: { width: '50%', paddingRight: 12, paddingBottom: 9 },
-  label: { fontSize: 7.5, color: COLORS.slate, textTransform: 'uppercase', marginBottom: 2 },
+  label: { fontSize: fontSize(7.5), color: COLORS.slate, textTransform: 'uppercase', marginBottom: 2 },
   value: { fontFamily: 'Helvetica-Bold', color: COLORS.navy },
   moduleCard: { marginBottom: 15, borderWidth: 1, borderColor: COLORS.border, borderRadius: 5 },
   moduleHeader: { padding: 10, backgroundColor: '#eaf2ff', flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: COLORS.border },
-  moduleNumber: { width: 25, fontFamily: 'Helvetica-Bold', color: COLORS.blue, fontSize: 12 },
-  moduleTitle: { flex: 1, color: COLORS.navy, fontFamily: 'Helvetica-Bold', fontSize: 11 },
+  moduleNumber: { width: 45, fontFamily: 'Helvetica-Bold', color: COLORS.blue, fontSize: fontSize(12) },
+  moduleTitle: { flex: 1, color: COLORS.navy, fontFamily: 'Helvetica-Bold', fontSize: fontSize(11) },
   moduleBody: { padding: 11 },
-  subTitle: { marginTop: 7, marginBottom: 4, fontFamily: 'Helvetica-Bold', color: COLORS.navy, fontSize: 9 },
+  subTitle: { marginTop: 7, marginBottom: 4, fontFamily: 'Helvetica-Bold', color: COLORS.navy, fontSize: fontSize(9) },
   moduleMeta: { marginTop: 9, paddingTop: 8, borderTopWidth: 1, borderTopColor: COLORS.border, flexDirection: 'row' },
   moduleMetaCell: { flex: 1 },
   table: { borderWidth: 1, borderColor: COLORS.border, borderRadius: 4, marginBottom: 8 },
   tableHeader: { flexDirection: 'row', backgroundColor: '#eaf2ff', paddingVertical: 7, paddingHorizontal: 8 },
   tableRow: { flexDirection: 'row', paddingVertical: 7, paddingHorizontal: 8, borderTopWidth: 1, borderTopColor: COLORS.border },
-  tableMain: { flex: 1 },
-  tableWorkload: { width: 78, textAlign: 'right' },
-  tableDuration: { width: 92, textAlign: 'right' },
-  tableMoney: { width: 108, textAlign: 'right' },
-  tableHeaderText: { color: COLORS.navy, fontFamily: 'Helvetica-Bold', fontSize: 8 },
-  totalBox: { marginLeft: 'auto', width: 245, marginTop: 8, padding: 12, backgroundColor: COLORS.light, borderRadius: 4 },
+  tableMain: { width: '34%' },
+  tableWorkload: { width: '18%', textAlign: 'right' },
+  tableDuration: { width: '24%', textAlign: 'right' },
+  tableMoney: { width: '24%', textAlign: 'right' },
+  tableHeaderText: { color: COLORS.navy, fontFamily: 'Helvetica-Bold', fontSize: fontSize(8) },
+  totalBox: { width: '100%', marginTop: 8, padding: 12, backgroundColor: COLORS.light, borderRadius: 4 },
   totalRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   totalLabel: { fontFamily: 'Helvetica-Bold', color: COLORS.navy },
-  totalValue: { fontFamily: 'Helvetica-Bold', color: COLORS.blue, fontSize: 13 },
-  small: { marginTop: 5, fontSize: 7.8, color: COLORS.slate },
+  totalValue: { fontFamily: 'Helvetica-Bold', color: COLORS.blue, fontSize: fontSize(13) },
+  small: { marginTop: 5, fontSize: fontSize(7.8), color: COLORS.slate },
   signatureRow: { marginTop: 52, flexDirection: 'row', gap: 28 },
   signature: { flex: 1, borderTopWidth: 1, borderTopColor: COLORS.navy, paddingTop: 7, textAlign: 'center' },
   signatureName: { fontFamily: 'Helvetica-Bold', marginBottom: 2 },
@@ -157,7 +161,7 @@ export default function ConsultingPdf({ quote, logoUrl }) {
 
   return (
     <Document title={`${quote.title} - ${quote.client.name}`} author={COMPANY.name} subject="Proposta comercial de assessoria especializada">
-      <Page size="A4" style={styles.cover}>
+      <Page size="A4" style={styles.cover} wrap={false}>
         <View style={styles.coverBand} />
         <View style={styles.coverTop}>
           <View style={styles.coverLogoBox}><Image src={logoUrl} style={styles.coverLogo} /></View>
@@ -201,7 +205,7 @@ export default function ConsultingPdf({ quote, logoUrl }) {
             <Text style={styles.paragraph}>{quote.executiveSummary}</Text>
           </View>
         ) : null}
-        <View style={styles.section}>
+        <View style={styles.section} wrap={false}>
           <Text style={styles.sectionTitle}>Como será o trabalho</Text>
           <Text style={styles.paragraph}>
             A assessoria será organizada em módulos. Cada módulo apresenta uma descrição, uma estimativa de horas, prazo e investimento. Ao final, faremos uma visita para validar o trabalho, entregar a documentação e orientar a equipe. Deslocamento, alimentação e eventual hospedagem dessa visita estão incluídos nos valores dos módulos.
@@ -263,7 +267,7 @@ export default function ConsultingPdf({ quote, logoUrl }) {
             {investment.priced.length === 0 ? <Text style={styles.small}>Os investimentos dos módulos selecionados serão definidos antes da contratação.</Text> : null}
           </View>
         </View>
-        <View style={styles.section}>
+        <View style={styles.section} wrap={false}>
           <Text style={styles.sectionTitle}>Cronograma e pagamento</Text>
           <Text style={styles.paragraph}><Text style={{ fontFamily: 'Helvetica-Bold' }}>Prazo global: </Text>{quote.overallTimeline || 'A definir.'}</Text>
           <Text style={styles.paragraph}><Text style={{ fontFamily: 'Helvetica-Bold' }}>Condição de pagamento: </Text>{quote.paymentTerms || 'A definir.'}</Text>
