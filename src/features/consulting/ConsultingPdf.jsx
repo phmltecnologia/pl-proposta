@@ -209,12 +209,12 @@ export default function ConsultingPdf({ quote, logoUrl }) {
         </View>
       </Page>
 
-      {modules.map((module, index) => (
-        <Page key={module.id} size="A4" style={styles.page} wrap>
-          <Header quote={quote} logoUrl={logoUrl} fixed />
-          <Footer fixed />
-          <Text style={styles.title}>Módulo {String(index + 1).padStart(2, '0')}</Text>
-          <View style={styles.moduleCard}>
+      <Page size="A4" style={styles.page} wrap>
+        <Header quote={quote} logoUrl={logoUrl} fixed />
+        <Footer fixed />
+        <Text style={styles.title}>Módulos da assessoria</Text>
+        {modules.map((module, index) => (
+          <View key={module.id} style={styles.moduleCard} wrap={false}>
             <View style={styles.moduleHeader}>
               <Text style={styles.moduleNumber}>{String(index + 1).padStart(2, '0')}</Text>
               <Text style={styles.moduleTitle}>{module.title}</Text>
@@ -229,8 +229,8 @@ export default function ConsultingPdf({ quote, logoUrl }) {
               </View>
             </View>
           </View>
-        </Page>
-      ))}
+        ))}
+      </Page>
 
       <Page size="A4" style={styles.page} wrap>
         <Header quote={quote} logoUrl={logoUrl} fixed />
