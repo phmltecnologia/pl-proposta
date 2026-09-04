@@ -113,7 +113,14 @@ function reindex(modules) {
 }
 
 function normalizeSelectedModule(module, standardModules) {
-  const standard = standardModules.get(module.sourceModuleId) || standardModules.get(module.id);
+  const legacyTitles = {
+    'Padronização de propriedades e descrições': 'properties-descriptions',
+    'Templates padrão do SolidWorks': 'solidworks-templates',
+    'Codificação e estrutura dos projetos': 'project-coding',
+    'Estrutura de arquivos e permissões no NAS': 'nas-structure',
+    'Macros e automações': 'macros-automation',
+  };
+  const standard = standardModules.get(module.sourceModuleId) || standardModules.get(module.id) || standardModules.get(legacyTitles[module.title]);
   if (!standard) return cleanModule(module);
   return cleanModule({ ...standard, id: module.id, sourceModuleId: module.sourceModuleId || standard.id, position: module.position });
 }
