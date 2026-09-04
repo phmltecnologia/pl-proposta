@@ -112,6 +112,12 @@ function reindex(modules) {
   return modules.map((module, index) => ({ ...module, position: index + 1 }));
 }
 
+function normalizeSelectedModule(module, standardModules) {
+  const standard = standardModules.get(module.sourceModuleId) || standardModules.get(module.id);
+  if (!standard) return cleanModule(module);
+  return cleanModule({ ...standard, id: module.id, sourceModuleId: module.sourceModuleId || standard.id, position: module.position });
+}
+
 function formatMoney(value) {
   if (Number(value) <= 0) return 'A definir';
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(value));
@@ -121,11 +127,12 @@ export default function ConsultingQuote({ onBack }) {
   const [quote, setQuote] = useState(() => {
     const defaults = createDefaultQuote();
     const stored = readStorage(CONSULTING_QUOTE_KEY, defaults);
+    const standardModules = new Map(cloneDefaultModules().map((module) => [module.id, module]));
     return {
       ...defaults,
       ...stored,
       client: { ...defaults.client, ...(stored.client || {}) },
-      selectedModules: reindex((stored.selectedModules || []).map(cleanModule)),
+      selectedModules: reindex((stored.selectedModules || []).map((module) => normalizeSelectedModule(module, standardModules))),
     };
   });
   const [library, setLibrary] = useState(() => {
