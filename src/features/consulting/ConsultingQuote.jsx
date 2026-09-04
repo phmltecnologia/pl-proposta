@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import {
   ArrowDown,
@@ -150,6 +150,12 @@ export default function ConsultingQuote({ onBack }) {
   });
   const [expandedLibrary, setExpandedLibrary] = useState(null);
   const [expandedSelected, setExpandedSelected] = useState(null);
+  const [previewQuote, setPreviewQuote] = useState(quote);
+  const latestQuote = useRef(quote);
+
+  useEffect(() => {
+    latestQuote.current = quote;
+  }, [quote]);
 
   useEffect(() => {
     try { localStorage.setItem(CONSULTING_QUOTE_KEY, JSON.stringify(quote)); } catch { /* armazenamento indisponível */ }
@@ -174,6 +180,15 @@ export default function ConsultingQuote({ onBack }) {
   const safeClient = (quote.client.name || 'CLIENTE').replace(/[\\/:*?"<>|]/g, '').trim();
   const safeNumber = (quote.number || 'SEM NUMERO').replace(/[\\/:*?"<>|]/g, '').trim();
   const fileName = `PROPOSTA DE ASSESSORIA - PL TECNOLOGIA - ${safeClient || 'CLIENTE'} - ${safeNumber || 'SEM NUMERO'}.pdf`;
+  const previewDocument = useMemo(() => <ConsultingPdf quote={previewQuote} logoUrl={logoUrl} />, [previewQuote, logoUrl]);
+
+  const commitPreview = () => setPreviewQuote(latestQuote.current);
+
+  const handleFormBlur = (event) => {
+    const nextElement = event.relatedTarget;
+    const isFormControl = (element) => element && ['INPUT', 'TEXTAREA', 'SELECT'].includes(element.tagName);
+    if (!isFormControl(nextElement)) commitPreview();
+  };
 
   const patchQuote = (patch) => setQuote((current) => ({ ...current, ...patch }));
   const patchClient = (patch) => setQuote((current) => ({ ...current, client: { ...current.client, ...patch } }));
@@ -278,7 +293,7 @@ export default function ConsultingQuote({ onBack }) {
       </header>
 
       <main className="mx-auto grid max-w-[1720px] gap-6 px-4 py-6 sm:px-6 xl:grid-cols-[minmax(0,1fr)_minmax(520px,0.82fr)]">
-        <div className="grid min-w-0 gap-6">
+        <div className="grid min-w-0 gap-6" onBlurCapture={handleFormBlur}>
           <Section title="Identificação" subtitle="Dados que aparecem na capa e no cabeçalho da proposta.">
             <div className="grid gap-4 sm:grid-cols-2">
               <TextField label="Número da proposta *" value={quote.number} onChange={(number) => patchQuote({ number })} required />
@@ -385,7 +400,7 @@ export default function ConsultingQuote({ onBack }) {
             <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 text-slate-900"><span className="text-sm font-black">Pré-visualização do PDF</span><span className="text-xs text-slate-500">A4 multipágina · tema claro</span></div>
             <div className="hidden h-[800px] xl:block">
               <PDFViewer width="100%" height="100%" showToolbar={false}>
-                <ConsultingPdf quote={quote} logoUrl={logoUrl} />
+                {previewDocument}
               </PDFViewer>
             </div>
             <div className="p-6 text-center text-sm text-slate-600 xl:hidden">A pré-visualização completa aparece em telas maiores. O download do PDF funciona normalmente neste dispositivo.</div>
