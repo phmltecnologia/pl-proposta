@@ -56,20 +56,6 @@ def draw_card():
     draw.text((655, 278), "assinatura", font=title, fill=BLACK)
     draw.text((655, 366), "Acesse sua proposta e assine", font=body, fill=SLATE)
     draw.text((655, 400), "eletronicamente", font=body, fill=SLATE)
-    # Caderno/documento com caneta, reforçando visualmente a ação de assinatura.
-    notebook = (930, 450, 1120, 590)
-    draw.rounded_rectangle(notebook, radius=14, fill="#dbeafe", outline=BLUE, width=4)
-    draw.rounded_rectangle((947, 467, 1103, 573), radius=8, fill="white")
-    draw.rectangle((965, 487, 1085, 494), fill=BLUE)
-    draw.rectangle((965, 515, 1060, 522), fill="#94a3b8")
-    draw.rectangle((965, 537, 1080, 544), fill="#cbd5e1")
-    draw.line((965, 558, 1070, 558), fill=BLACK, width=3)
-
-    # Caneta apoiada na diagonal sobre o caderno.
-    draw.line((1010, 425, 1138, 485), fill=BLACK, width=13)
-    draw.line((1015, 422, 1137, 479), fill=BLUE, width=8)
-    draw.polygon([(1138, 485), (1157, 495), (1137, 479)], fill=BLACK)
-    draw.rectangle((1002, 418, 1020, 433), fill=BLACK)
 
     image.save(OUTPUT, "PNG", optimize=True)
 
