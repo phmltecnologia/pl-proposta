@@ -121,7 +121,8 @@ const styles = StyleSheet.create({
   totalValue: { fontFamily: 'Helvetica-Bold', color: COLORS.blue, fontSize: fontSize(13) },
   small: { marginTop: 5, fontSize: fontSize(7.8), color: COLORS.slate },
   signatureRow: { marginTop: 52, flexDirection: 'row', gap: 28 },
-  signature: { flex: 1, borderTopWidth: 1, borderTopColor: COLORS.navy, paddingTop: 7, textAlign: 'center' },
+  signature: { flex: 1, borderTopWidth: 1, borderTopColor: COLORS.navy, paddingTop: 7, textAlign: 'center', minHeight: 68 },
+  signatureImage: { height: 46, marginBottom: -5, objectFit: 'contain' },
   signatureName: { fontFamily: 'Helvetica-Bold', marginBottom: 2 },
 });
 
@@ -155,7 +156,7 @@ function Footer({ fixed = false }) {
   );
 }
 
-export default function ConsultingPdf({ quote, logoUrl }) {
+export default function ConsultingPdf({ quote, logoUrl, signatureDataUrl = '', signedAt = '' }) {
   const modules = [...(quote.selectedModules || [])].sort((a, b) => a.position - b.position);
   const investment = getInvestmentSummary(modules);
 
@@ -283,7 +284,7 @@ export default function ConsultingPdf({ quote, logoUrl }) {
             A assinatura abaixo formaliza o aceite do escopo e das condições desta proposta. Local: {quote.acceptanceLocation || '________________________'}, data: ____/____/________.
           </Text>
           <View style={styles.signatureRow} wrap={false}>
-            <View style={styles.signature}><Text style={styles.signatureName}>{quote.client.name || 'Contratante'}</Text><Text>Contratante</Text></View>
+            <View style={styles.signature}>{signatureDataUrl ? <Image src={signatureDataUrl} style={styles.signatureImage} /> : null}<Text style={styles.signatureName}>{quote.client.name || 'Contratante'}</Text><Text>Contratante{signedAt ? ` · Assinado em ${new Date(signedAt).toLocaleString('pt-BR')}` : ''}</Text></View>
             <View style={styles.signature}><Text style={styles.signatureName}>{COMPANY.responsible}</Text><Text>{COMPANY.name}</Text></View>
           </View>
         </View>

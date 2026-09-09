@@ -15,6 +15,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import ConsultingPdf from './ConsultingPdf';
+import SignatureLinkButton from '../signature/SignatureLinkButton';
 import {
   CONSULTING_MODULES_KEY,
   CONSULTING_QUOTE_KEY,
@@ -279,6 +280,7 @@ export default function ConsultingQuote({ onBack }) {
             <button type="button" onClick={newQuote} className="inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-bold ring-1 ring-slate-300 hover:bg-slate-50">
               <FilePlus2 size={16} /> Nova proposta
             </button>
+            <SignatureLinkButton documentType="consulting" snapshot={quote} validationErrors={validation} />
             {validation.length ? (
               <button type="button" disabled title={validation.join(' ')} className="inline-flex cursor-not-allowed items-center gap-2 rounded-lg bg-slate-300 px-4 py-2 text-sm font-black text-slate-600">
                 <Download size={16} /> Baixar PDF

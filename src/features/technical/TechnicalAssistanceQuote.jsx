@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { ArrowLeft, Plus, Trash2, Download, RefreshCw } from 'lucide-react';
+import SignatureLinkButton from '../signature/SignatureLinkButton';
 
 const BRL = new Intl.NumberFormat('pt-BR', {
   style: 'currency',
@@ -262,6 +263,13 @@ const TechnicalAssistanceQuote = ({ onBack }) => {
     pdf.save(fileName);
   };
 
+  const signatureValidation = useMemo(() => {
+    const errors = [];
+    if (!String(data.quote?.number || '').trim()) errors.push('Informe o número do orçamento.');
+    if (!String(data.client?.name || '').trim()) errors.push('Informe o nome do cliente.');
+    return errors;
+  }, [data.quote?.number, data.client?.name]);
+
   return (
     <div className="min-h-screen bg-slate-100 font-sans text-slate-900">
       <div className="mx-auto max-w-[1400px] px-4 py-6 print:p-0">
@@ -289,6 +297,7 @@ const TechnicalAssistanceQuote = ({ onBack }) => {
               <RefreshCw size={16} />
               Reset
             </button>
+            <SignatureLinkButton documentType="technical" snapshot={data} validationErrors={signatureValidation} />
             <button
               type="button"
               onClick={handleDownloadPDF}

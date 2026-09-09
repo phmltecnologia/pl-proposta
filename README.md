@@ -1,5 +1,21 @@
 # React + Vite
 
+## Assinatura eletrônica
+
+O editor pode criar links públicos de assinatura para os dois modelos de documento. O fluxo usa funções da Vercel e o Supabase para guardar o snapshot congelado da proposta e os artefatos assinados.
+
+### Configuração do Supabase
+
+1. Crie um projeto no Supabase.
+2. Execute [`supabase/schema.sql`](supabase/schema.sql) no SQL Editor.
+3. Configure na Vercel (e no ambiente local, se necessário):
+   - `SUPABASE_URL`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+
+A chave `SUPABASE_SERVICE_ROLE_KEY` deve ficar somente nas variáveis de ambiente do servidor. O bucket `signature-artifacts` é privado e os PDFs assinados são entregues pela API após a validação do token.
+
+O link expira às 23:59:59 do dia em que foi criado, no horário de Brasília. A assinatura implementada é eletrônica simples; não substitui uma assinatura certificada por uma plataforma especializada ou ICP-Brasil.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

@@ -3,6 +3,7 @@ import { ArrowRight, FileCog, Home, Wrench } from 'lucide-react';
 
 const TechnicalAssistanceQuote = lazy(() => import('./features/technical/TechnicalAssistanceQuote'));
 const ConsultingQuote = lazy(() => import('./features/consulting/ConsultingQuote'));
+const SignaturePage = lazy(() => import('./features/signature/SignaturePage'));
 
 const DOCUMENTS = [
   {
@@ -75,6 +76,9 @@ function HomeScreen({ onSelect }) {
 
 export default function App() {
   const [screen, setScreen] = useState('home');
+  const signatureToken = window.location.pathname.match(/^\/assinar\/([^/]+)\/?$/)?.[1];
+
+  if (signatureToken) return <Suspense fallback={<LoadingScreen />}><SignaturePage token={decodeURIComponent(signatureToken)} /></Suspense>;
 
   if (screen === 'technical') return <Suspense fallback={<LoadingScreen />}><TechnicalAssistanceQuote onBack={() => setScreen('home')} /></Suspense>;
   if (screen === 'consulting') return <Suspense fallback={<LoadingScreen />}><ConsultingQuote onBack={() => setScreen('home')} /></Suspense>;
