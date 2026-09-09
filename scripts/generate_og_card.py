@@ -38,17 +38,17 @@ def draw_card():
     draw.rounded_rectangle((965, 545, 1160, 705), radius=75, fill=BLACK)
 
     logo = cropped_logo()
-    logo.thumbnail((470, 350), Image.Resampling.LANCZOS)
-    logo_x = 75 + (470 - logo.width) // 2
-    logo_y = 150 + (350 - logo.height) // 2
+    logo.thumbnail((360, 280), Image.Resampling.LANCZOS)
+    logo_x = 105 + (360 - logo.width) // 2
+    logo_y = 175 + (280 - logo.height) // 2
     image.paste(logo, (logo_x, logo_y))
 
     draw.rectangle((585, 82, 589, 520), fill=BLUE)
 
-    brand_blue = load_font(["segoeuib.ttf", "arialbd.ttf"], 48)
-    brand_black = load_font(["segoeui.ttf", "arial.ttf"], 48)
-    title = load_font(["segoeuib.ttf", "arialbd.ttf"], 53)
-    body = load_font(["segoeui.ttf", "arial.ttf"], 25)
+    brand_blue = load_font(["segoeuib.ttf", "arialbd.ttf"], 50)
+    brand_black = load_font(["segoeui.ttf", "arial.ttf"], 50)
+    title = load_font(["segoeuib.ttf", "arialbd.ttf"], 62)
+    body = load_font(["segoeui.ttf", "arial.ttf"], 28)
     tagline = load_font(["segoeuib.ttf", "arialbd.ttf"], 22)
 
     draw.text((655, 105), "PHML", font=brand_blue, fill=BLUE_DARK)
