@@ -47,13 +47,13 @@ def draw_card():
 
     brand_blue = load_font(["segoeuib.ttf", "arialbd.ttf"], 50)
     brand_black = load_font(["segoeui.ttf", "arial.ttf"], 50)
-    title = load_font(["segoeuib.ttf", "arialbd.ttf"], 62)
+    title = load_font(["segoeuib.ttf", "arialbd.ttf"], 54)
     body = load_font(["segoeui.ttf", "arial.ttf"], 28)
 
     draw.text((655, 105), "PHML", font=brand_blue, fill=BLUE_DARK)
     draw.text((835, 105), "TECNOLOGIA", font=brand_black, fill=BLACK)
-    draw.text((655, 215), "Documento para", font=title, fill=BLACK)
-    draw.text((655, 278), "assinatura", font=title, fill=BLACK)
+    draw.text((655, 215), "Assinar documento", font=title, fill=BLACK)
+    draw.text((655, 278), "online", font=title, fill=BLACK)
     draw.text((655, 366), "Acesse sua proposta e assine", font=body, fill=SLATE)
     draw.text((655, 400), "eletronicamente", font=body, fill=SLATE)
 
