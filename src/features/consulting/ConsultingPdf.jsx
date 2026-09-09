@@ -121,8 +121,11 @@ const styles = StyleSheet.create({
   totalValue: { fontFamily: 'Helvetica-Bold', color: COLORS.blue, fontSize: fontSize(13) },
   small: { marginTop: 5, fontSize: fontSize(7.8), color: COLORS.slate },
   signatureRow: { marginTop: 52, flexDirection: 'row', gap: 28 },
-  signature: { flex: 1, borderTopWidth: 1, borderTopColor: COLORS.navy, paddingTop: 7, textAlign: 'center', minHeight: 68 },
-  signatureImage: { height: 46, marginBottom: -5, objectFit: 'contain' },
+  signature: { flex: 1, alignItems: 'center', textAlign: 'center', minHeight: 108 },
+  signatureArtwork: { width: '100%', height: 58, alignItems: 'center', justifyContent: 'flex-end' },
+  signatureImage: { width: '76%', height: 54, objectFit: 'contain' },
+  signaturePlaceholder: { height: 54 },
+  signatureLine: { width: '60%', borderTopWidth: 1, borderTopColor: COLORS.navy, marginTop: 2, marginBottom: 7 },
   signatureName: { fontFamily: 'Helvetica-Bold', marginBottom: 2 },
 });
 
@@ -284,8 +287,8 @@ export default function ConsultingPdf({ quote, logoUrl, signatureDataUrl = '', s
             A assinatura abaixo formaliza o aceite do escopo e das condições desta proposta. Local: {quote.acceptanceLocation || '________________________'}, data: ____/____/________.
           </Text>
           <View style={styles.signatureRow} wrap={false}>
-            <View style={styles.signature}>{signatureDataUrl ? <Image src={signatureDataUrl} style={styles.signatureImage} /> : null}<Text style={styles.signatureName}>{quote.client.name || 'Contratante'}</Text><Text>Contratante{signedAt ? ` · Assinado em ${new Date(signedAt).toLocaleString('pt-BR')}` : ''}</Text></View>
-            <View style={styles.signature}><Text style={styles.signatureName}>{COMPANY.responsible}</Text><Text>{COMPANY.name}</Text></View>
+            <View style={styles.signature}><View style={styles.signatureArtwork}>{signatureDataUrl ? <Image src={signatureDataUrl} style={styles.signatureImage} /> : <View style={styles.signaturePlaceholder} />}</View><View style={styles.signatureLine} /><Text style={styles.signatureName}>{quote.client.name || 'Contratante'}</Text><Text>Contratante{signedAt ? ` · Assinado em ${new Date(signedAt).toLocaleString('pt-BR')}` : ''}</Text></View>
+            <View style={styles.signature}><View style={styles.signatureArtwork}><View style={styles.signaturePlaceholder} /></View><View style={styles.signatureLine} /><Text style={styles.signatureName}>{COMPANY.responsible}</Text><Text>{COMPANY.name}</Text></View>
           </View>
         </View>
       </Page>

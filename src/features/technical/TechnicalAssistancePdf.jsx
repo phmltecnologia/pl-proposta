@@ -12,7 +12,8 @@ const styles = StyleSheet.create({
   meta: { width: 150, textAlign: 'right', color: colors.slate, fontSize: 7, lineHeight: 1.3 },
   metaStrong: { fontFamily: 'Helvetica-Bold', color: colors.navy },
   title: { marginTop: 12, fontSize: 15, fontFamily: 'Helvetica-Bold', color: colors.navy },
-  label: { fontSize: 6.3, fontFamily: 'Helvetica-Bold', color: colors.slate, textTransform: 'uppercase', letterSpacing: 0.5 },
+  label: { fontSize: 6.3, lineHeight: 1.15, fontFamily: 'Helvetica-Bold', color: colors.slate, textTransform: 'uppercase', letterSpacing: 0.5 },
+  fieldLabel: { marginBottom: 6 },
   value: { marginTop: 2, fontSize: 8.2, fontFamily: 'Helvetica-Bold' },
   grid: { flexDirection: 'row', marginTop: 8 },
   cell: { flex: 1, padding: 6, borderWidth: 1, borderColor: colors.line, borderRadius: 4, marginLeft: 5 },
@@ -31,9 +32,12 @@ const styles = StyleSheet.create({
   summaryLine: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 3, color: colors.slate, fontSize: 7.2 },
   grandTotal: { flexDirection: 'row', justifyContent: 'space-between', borderTopWidth: 1, borderTopColor: colors.line, paddingTop: 5, marginTop: 3, fontFamily: 'Helvetica-Bold', fontSize: 10 },
   signatures: { flexDirection: 'row', marginTop: 18 },
-  signature: { flex: 1, borderTopWidth: 1, borderTopColor: colors.navy, paddingTop: 5, textAlign: 'center', minHeight: 48 },
+  signature: { flex: 1, alignItems: 'center', textAlign: 'center', minHeight: 78 },
   signatureSecond: { marginLeft: 24 },
-  signatureImage: { height: 28, marginBottom: -2, objectFit: 'contain' },
+  signatureArtwork: { width: '100%', height: 44, alignItems: 'center', justifyContent: 'flex-end' },
+  signatureImage: { width: '78%', height: 42, objectFit: 'contain' },
+  signaturePlaceholder: { height: 42 },
+  signatureLine: { width: '60%', borderTopWidth: 1, borderTopColor: colors.navy, marginTop: 2, marginBottom: 5 },
   footer: { position: 'absolute', bottom: 12, left: 30, right: 30, textAlign: 'center', color: colors.slate, fontSize: 6.2 },
 });
 
@@ -60,12 +64,12 @@ export default function TechnicalAssistancePdf({ data, logoUrl, signatureDataUrl
         </View>
         <Text style={styles.title} maxLines={1}>Orçamento de Assistência Técnica</Text>
         <View style={styles.grid} wrap={false}><View style={styles.wideCell}><Text style={styles.label}>Cliente</Text><Text style={styles.value} maxLines={1}>{data.client?.name || '-'}</Text><Text style={styles.paragraph} maxLines={1}>{[data.client?.contact, data.client?.phone, data.client?.email].filter(Boolean).join(' · ') || ' '}</Text></View><View style={styles.cell}><Text style={styles.label}>Entrega</Text><Text style={styles.value} maxLines={1}>{number(data.delivery?.daysAfterApproval)} dias úteis</Text></View><View style={styles.cell}><Text style={styles.label}>Garantia</Text><Text style={styles.value} maxLines={1}>{number(data.warranty?.months)} {number(data.warranty?.months) === 1 ? 'mês' : 'meses'}</Text></View></View>
-        <View style={styles.section} wrap={false}><Text style={styles.sectionTitle}>Atendimento</Text><View style={styles.grid} wrap={false}><View style={styles.wideCell}><Text style={styles.label}>Equipamento</Text><Text style={styles.value} maxLines={1}>{data.service?.equipment || '-'}</Text></View><View style={styles.cell}><Text style={styles.label}>Nº de série</Text><Text style={styles.value} maxLines={1}>{data.service?.serial || '-'}</Text></View></View><View style={[styles.cell, { marginLeft: 0, marginTop: 6 }]}><Text style={styles.label}>Reclamação / sintoma</Text><Text style={styles.paragraph} maxLines={2}>{data.service?.complaint || '-'}</Text></View></View>
+        <View style={styles.section} wrap={false}><Text style={styles.sectionTitle}>Atendimento</Text><View style={styles.grid} wrap={false}><View style={styles.wideCell}><Text style={styles.label}>Equipamento</Text><Text style={styles.value} maxLines={1}>{data.service?.equipment || '-'}</Text></View><View style={styles.cell}><Text style={styles.label}>Nº de série</Text><Text style={styles.value} maxLines={1}>{data.service?.serial || '-'}</Text></View></View><View style={[styles.cell, { marginLeft: 0, marginTop: 6 }]}><Text style={[styles.label, styles.fieldLabel]}>Reclamação / sintoma</Text><Text style={styles.paragraph} maxLines={2}>{data.service?.complaint || '-'}</Text></View></View>
         {table('Insumos', supplies, suppliesTotal)}
         {table('Serviços', services, servicesTotal)}
         <View style={styles.summary}><View style={styles.summaryLine}><Text>Insumos</Text><Text>{brl(suppliesTotal)}</Text></View><View style={styles.summaryLine}><Text>Serviços</Text><Text>{brl(servicesTotal)}</Text></View><View style={styles.summaryLine}><Text>Mão de obra</Text><Text>{brl(labor)}</Text></View><View style={styles.grandTotal}><Text>Total</Text><Text>{brl(total)}</Text></View></View>
         <View style={styles.section} wrap={false}><Text style={styles.sectionTitle}>Observações</Text><Text style={styles.paragraph} maxLines={2}>{data.notes || '-'}</Text></View>
-        <View style={styles.signatures} wrap={false}><View style={styles.signature}>{signatureDataUrl ? <Image src={signatureDataUrl} style={styles.signatureImage} /> : null}<Text style={styles.metaStrong} maxLines={1}>{data.client?.name || 'Cliente'}</Text><Text style={styles.subtitle} maxLines={1}>Cliente{signedAt ? ` · Assinado em ${new Date(signedAt).toLocaleString('pt-BR')}` : ''}</Text></View><View style={[styles.signature, styles.signatureSecond]}><Text style={{ height: 28 }} /><Text style={styles.metaStrong} maxLines={1}>Pedro Luz</Text><Text style={styles.subtitle} maxLines={1}>{data.company?.name || 'PL Tecnologia'}</Text></View></View>
+        <View style={styles.signatures} wrap={false}><View style={styles.signature}><View style={styles.signatureArtwork}>{signatureDataUrl ? <Image src={signatureDataUrl} style={styles.signatureImage} /> : <View style={styles.signaturePlaceholder} />}</View><View style={styles.signatureLine} /><Text style={styles.metaStrong} maxLines={1}>{data.client?.name || 'Cliente'}</Text><Text style={styles.subtitle} maxLines={1}>Cliente{signedAt ? ` · Assinado em ${new Date(signedAt).toLocaleString('pt-BR')}` : ''}</Text></View><View style={[styles.signature, styles.signatureSecond]}><View style={styles.signatureArtwork}><View style={styles.signaturePlaceholder} /></View><View style={styles.signatureLine} /><Text style={styles.metaStrong} maxLines={1}>Pedro Luz</Text><Text style={styles.subtitle} maxLines={1}>{data.company?.name || 'PL Tecnologia'}</Text></View></View>
         <Text style={styles.footer}>Documento gerado pela PL Tecnologia · Assinatura eletrônica simples</Text>
       </Page>
     </Document>
